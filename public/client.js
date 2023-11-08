@@ -26,14 +26,10 @@ socket.on('chat message', function(msg) {
 });
 
 socket.on('add link', (msg)=> {
-    let link = document.createElement('span');
+    let link = document.createElement('a');
     link.setAttribute('href', msg);
-    link.textContent = msg;
-    /* function downloadFile() {
-        let neededUrl = link.textContent
-        console.log(neededUrl);
-        } */
-       
+    link.setAttribute('download', 'download')
+    link.textContent = msg;       
     messages.appendChild(link);
     window.scrollTo(0, document.body.scrollHeight);
 });

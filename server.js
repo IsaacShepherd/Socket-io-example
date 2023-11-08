@@ -7,9 +7,25 @@ const keywords = require('./keywords');
 const io = new Server(server);
 
 app.use(express.static('public'))
+app.use(express.static('img'))
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + 'public/index.html');
+});
+
+/* app.get("/img", function (req, res) {   
+  // The res.download() talking file path to be downloaded 
+  res.download(__dirname + "/cat4.jpg", function (err) { 
+    if (err) { 
+      console.log(err); 
+    } 
+  }); 
+});  */
+const re = /.*/;
+app.get(/img\/.*/, (req, res) => {
+  console.log(req.path);
+  res.sendFile(__dirname +req.path);
+  console.log(__dirname + req.path);
 });
 
 io.on('connection', (socket) => {
@@ -27,6 +43,7 @@ io.on('connection', (socket) => {
     io.emit('chat message', msg);
     const urls = keywords[msg];
     if (urls) {
+      io.emit('chat message', `Here are some ${msg}s that we have. Click link to download.`);
       urls.forEach(element => {
         socket.emit('add link', element)
         io.emit('chat message', '---------------')
